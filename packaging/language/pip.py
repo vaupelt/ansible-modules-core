@@ -100,7 +100,7 @@ options:
 notes:
    - Please note that virtualenv (U(http://www.virtualenv.org/)) must be installed on the remote host if the virtualenv parameter is specified and the virtualenv needs to be initialized.
 requirements: [ "virtualenv", "pip" ]
-author: Matt Wright
+author: "Matt Wright (@mattupstate)"
 '''
 
 EXAMPLES = '''
@@ -320,7 +320,7 @@ def main():
         this_dir = os.path.join(this_dir, chdir)
 
     if module.check_mode:
-        if env or extra_args or requirements or state == 'latest' or not name:
+        if extra_args or requirements or state == 'latest' or not name:
             module.exit_json(changed=True)
         elif name.startswith('svn+') or name.startswith('git+') or \
                 name.startswith('hg+') or name.startswith('bzr+'):

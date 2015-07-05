@@ -33,6 +33,7 @@ module: os_server
 short_description: Create/Delete Compute Instances from OpenStack
 extends_documentation_fragment: openstack
 version_added: "2.0"
+author: "Monty Taylor (@emonty)"
 description:
    - Create or Remove compute instances from OpenStack.
 options:
@@ -89,6 +90,11 @@ options:
         - Ensure instance has public ip however the cloud wants to do that
      required: false
      default: 'yes'
+   auto_floating_ip:
+     description:
+        - If the module should automatically assign a floating IP
+     required: false
+     default: 'yes'
    floating_ips:
      description:
         - list of valid floating IPs that pre-exist to assign to this node
@@ -140,7 +146,9 @@ options:
        - Should the resource be present or absent.
      choices: [present, absent]
      default: present
-requirements: ["shade"]
+requirements:
+    - "python >= 2.6"
+    - "shade"
 '''
 
 EXAMPLES = '''
@@ -238,7 +246,8 @@ EXAMPLES = '''
 
 def _exit_hostvars(module, cloud, server, changed=True):
     hostvars = meta.get_hostvars_from_server(cloud, server)
-    module.exit_json(changed=changed, id=server.id, openstack=hostvars)
+    module.exit_json(
+        changed=changed, server=server, id=server.id, openstack=hostvars)
 
 
 def _network_args(module, cloud):
@@ -443,4 +452,5 @@ def main():
 # this is magic, see lib/ansible/module_common.py
 from ansible.module_utils.basic import *
 from ansible.module_utils.openstack import *
-main()
+if __name__ == '__main__':
+    main()

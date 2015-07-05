@@ -21,7 +21,7 @@
 DOCUMENTATION = '''
 ---
 module: user
-author: Stephen Fromm
+author: "Stephen Fromm (@sfromm)"
 version_added: "0.2"
 short_description: Manage user accounts
 requirements: [ useradd, userdel, usermod ]
@@ -239,7 +239,7 @@ class User(object):
     platform = 'Generic'
     distribution = None
     SHADOWFILE = '/etc/shadow'
-    DATE_FORMAT = '%Y-%M-%d'
+    DATE_FORMAT = '%Y-%m-%d'
 
     def __new__(cls, *args, **kwargs):
         return load_platform_subclass(User, args, kwargs)

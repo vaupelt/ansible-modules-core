@@ -21,7 +21,7 @@
 DOCUMENTATION = '''
 ---
 module: group
-author: Stephen Fromm
+author: "Stephen Fromm (@sfromm)"
 version_added: "0.0.2"
 short_description: Add or remove groups
 requirements: [ groupadd, groupdel, groupmod ]
@@ -121,7 +121,7 @@ class Group(object):
         if len(cmd) == 1:
             return (None, '', '')
         if self.module.check_mode:
-	    return (0, '', '')
+            return (0, '', '')
         cmd.append(self.name)
         return self.execute_command(cmd)
 

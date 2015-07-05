@@ -25,7 +25,7 @@ description:
   - Can search AMIs with different owners
   - Can search by matching tag(s), by AMI name and/or other criteria
   - Results can be sorted and sliced
-author: Tom Bamford
+author: "Tom Bamford (@tombamford)"
 notes:
   - This module is not backwards compatible with the previous version of the ec2_search_ami module which worked only for Ubuntu AMIs listed on cloud-images.ubuntu.com.
   - See the example below for a suggestion of how to search by distro/release.
@@ -130,6 +130,7 @@ options:
     default: 'success'
     required: false
 requirements:
+  - "python >= 2.6"
   - boto
 
 '''
@@ -140,7 +141,7 @@ EXAMPLES = '''
 # Search for the AMI tagged "project:website"
 - ec2_ami_find:
     owner: self
-    tags:
+    ami_tags:
       project: website
     no_result_action: fail
   register: ami_find
@@ -156,7 +157,7 @@ EXAMPLES = '''
 
 # Launch an EC2 instance
 - ec2:
-    image: "{{ ami_search.results[0].ami_id }}"
+    image: "{{ ami_find.results[0].ami_id }}"
     instance_type: m3.medium
     key_name: mykey
     wait: yes

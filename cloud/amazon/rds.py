@@ -102,7 +102,7 @@ options:
     required: false
     default: null
     aliases: []
-    choices:  [ 'license-included', 'bring-your-own-license', 'general-public-license' ]
+    choices:  [ 'license-included', 'bring-your-own-license', 'general-public-license', 'postgresql-license' ]
   multi_zone:
     description:
       - Specifies if this is a Multi-availability-zone deployment. Can not be used in conjunction with zone parameter. Used only when command=create or command=modify.
@@ -241,8 +241,13 @@ options:
     default: null
     aliases: []
     version_added: 1.9
-requirements: [ "boto" ]
-author: Bruce Pennypacker, Will Thames
+requirements:
+    - "python >= 2.6"
+    - "boto"
+author:
+    - "Bruce Pennypacker (@bpennypacker)"
+    - "Will Thames (@willthames)"
+
 '''
 
 # FIXME: the command stuff needs a 'state' like alias to make things consistent -- MPD
@@ -622,6 +627,8 @@ def await_resource(conn, resource, status, module):
             if resource.name is None:
                 module.fail_json(msg="Problem with instance %s" % resource.instance)
             resource = conn.get_db_instance(resource.name)
+            if resource is None:
+                break
     return resource
 
 
@@ -961,7 +968,7 @@ def main():
             db_name           = dict(required=False),
             engine_version    = dict(required=False),
             parameter_group   = dict(required=False),
-            license_model     = dict(choices=['license-included', 'bring-your-own-license', 'general-public-license'], required=False),
+            license_model     = dict(choices=['license-included', 'bring-your-own-license', 'general-public-license', 'postgresql-license'], required=False),
             multi_zone        = dict(type='bool', default=False),
             iops              = dict(required=False), 
             security_groups   = dict(required=False),

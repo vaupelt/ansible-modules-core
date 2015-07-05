@@ -101,7 +101,10 @@ options:
 notes:
   - The ability to use search_regex with a port connection was added in 1.7.
 requirements: []
-author: Jeroen Hoekx, John Jarvis, Andrii Radyk
+author: 
+    - "Jeroen Hoekx (@jhoekx)"
+    - "John Jarvis (@jarv)"
+    - "Andrii Radyk (@AnderEnder)"
 '''
 
 EXAMPLES = '''
@@ -360,12 +363,15 @@ def main():
     if params['exclude_hosts'] is not None and state != 'drained':
         module.fail_json(msg="exclude_hosts should only be with state=drained")
 
+
     start = datetime.datetime.now()
 
     if delay:
         time.sleep(delay)
 
-    if state in [ 'stopped', 'absent' ]:
+    if not port and not path and state != 'drained':
+        time.sleep(timeout)
+    elif state in [ 'stopped', 'absent' ]:
         ### first wait for the stop condition
         end = start + datetime.timedelta(seconds=timeout)
 
@@ -388,6 +394,8 @@ def main():
                     time.sleep(1)
                 except:
                     break
+            else:
+                time.sleep(1)
         else:
             elapsed = datetime.datetime.now() - start
             if port:
@@ -450,6 +458,8 @@ def main():
                 except:
                     time.sleep(1)
                     pass
+            else:
+                time.sleep(1)
         else:
             elapsed = datetime.datetime.now() - start
             if port:
